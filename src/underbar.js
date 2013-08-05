@@ -220,6 +220,7 @@ var _ = { };
       return iterator(item);
     }, false);
 
+    //fix the case of using numbers as bools
     if (result === true || result === 1){
       return true;
     }
@@ -249,6 +250,12 @@ var _ = { };
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    for(var i = 0; i < arguments.length; i++){
+      for(var key in arguments[i]){
+        obj[key] = arguments[i][key];
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
