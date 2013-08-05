@@ -78,7 +78,7 @@ var _ = { };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, iterator) {
-     return _.filter(collection, function(value){return ! iterator(value);});
+     return _.filter(collection, function(value){return !iterator(value);});
       // TIP: see if you can re-use _.select() here, without simply
       // copying code in and modifying it
   };
@@ -141,11 +141,6 @@ var _ = { };
         return methodName.apply(value,args);
       }
     });
-
-    /*for (var i = 0; i < list.length; i++) {
-      list[i][methodName](args);
-    };
-    return list;*/
   };
 
   // Reduces an array or object to a single value by repetitively calling
@@ -186,22 +181,51 @@ var _ = { };
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    return _.reduce(collection,function(matches,item){
+    if(iterator === undefined){
+      iterator = function(item){
+        return item;
+      };
+    }
+
+    var result =  _.reduce(collection,function(matches,item){
       if(matches){
         return iterator(item);
       }
       return false;
     },true);
+
+    //fix the case of using numbers as bools
+    if (result === true || result === 1){
+      return true;
+    }
+    else{
+      return false;
+    }
     // TIP: Try re-using reduce() here.
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    
-    return _.every(collection,function(){
+    if(iterator === undefined){
+      iterator = function(item){
+        return item;
+      };
+    }
 
-    })
+    var result = _.reduce(collection,function(anyPass,item){
+      if(anyPass){
+        return true;
+      }
+      return iterator(item);
+    }, false);
+
+    if (result === true || result === 1){
+      return true;
+    }
+    else{
+      return false;
+    }
     // TIP: There's a very clever way to re-use every() here.
   };
 
