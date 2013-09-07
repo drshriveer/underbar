@@ -42,9 +42,16 @@ var _ = { };
   // Accepts both arrays and objects.
   _.each = function(collection, iterator) {
 
-    for(var key in collection){
-      iterator(collection[key],key,collection);
-    }
+     if (Array.isArray(collection)){
+         for( var i = 0; i < collection.length; i++){
+             iterator(collection[i], i, collection);
+         }
+     }
+     else{
+         for(var key in collection){
+          iterator(collection[key],key,collection);
+        }
+    }     
 
   };
 
@@ -53,13 +60,15 @@ var _ = { };
 
   _.indexOf = function(array, target){
 
-    for (var i = 0; i < array.length; i++) {
-      if(array[i] === target){
-        return i;
-      }
-    }
+    var targetIndex = -1;
     
-    return -1; //if not found
+    _.each(array, function(val, index){ 
+        if(val === target &&  targetIndex === -1){ 
+            targetIndex = index;
+        }
+    });
+
+    return targetIndex; //if not found
   };
 
 
@@ -67,11 +76,13 @@ var _ = { };
   _.filter = function(collection, iterator) {
       
     var filtered = [];
-    for (var i = 0; i < collection.length; i++) {
-      if(iterator(collection[i])){
-        filtered.push(collection[i]);
-      }
-    };
+    
+    _.each(collection, function(val){
+        if(test(val)){
+           filtered.push(val);
+        }
+     });  
+    
     return filtered;
 
   };
@@ -310,7 +321,8 @@ var _ = { };
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-
+    var memory = {};
+    
   };
 
   // Delays a function for the given number of milliseconds, and then calls
