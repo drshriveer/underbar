@@ -78,7 +78,7 @@ var _ = { };
     var filtered = [];
     
     _.each(collection, function(val){
-        if(test(val)){
+        if(iterator(val)){
            filtered.push(val);
         }
      });  
@@ -321,8 +321,22 @@ var _ = { };
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    
     var memory = {};
     
+  
+    return function(){
+
+      //need to identify function with arguments also
+      var funcID = func.apply(this, arguments);
+
+      if( !(funcID in memory) ){
+        memory[funcID] = func.apply(this, arguments);
+      }
+
+      return memory[funcID];
+    };
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -344,6 +358,15 @@ var _ = { };
 
   // Shuffle an array.
   _.shuffle = function(array) {
+     var shuffled = [];
+ 
+    _.each(array, function(val, index){
+      var swapIndex = Math.floor(Math.random()*array.length);
+      shuffled[index] = array[swapIndex];
+      shuffled[swapIndex] = val;
+    });
+
+    return shuffled;
   };
 
 
