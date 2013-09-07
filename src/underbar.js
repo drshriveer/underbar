@@ -358,11 +358,11 @@ var _ = { };
 
   // Shuffle an array.
   _.shuffle = function(array) {
-     var shuffled = [];
+     var shuffled = array.slice(0);
  
-    _.each(array, function(val, index){
-      var swapIndex = Math.floor(Math.random()*array.length);
-      shuffled[index] = array[swapIndex];
+    _.each(shuffled, function(val, index){
+      var swapIndex = Math.floor(Math.random()*shuffled.length);
+      shuffled[index] = shuffled[swapIndex];
       shuffled[swapIndex] = val;
     });
 
